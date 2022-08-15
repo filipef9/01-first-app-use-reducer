@@ -1,10 +1,34 @@
+import { useReducer } from "react";
 import "./styles.css";
 
+interface State {
+  count: number
+}
+
+type Action = { type: 'increment' } | { type: 'decrement' }
+
+const increment = (): Action => ({ type: 'increment' })
+const decrement = (): Action => ({ type: 'decrement' })
+
+const counterReducer = (state: State, action: Action) => {
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1}
+    case 'decrement':
+      return { count: state.count - 1}
+    default:
+      throw new Error()
+  }
+}
+
 export default function App() {
+  const [state, dispatch] = useReducer(counterReducer, { count: 0 })
+  
   return (
-    <div className="App">
-      <h1>Hello CodeSandbox</h1>
-      <h2>Start editing to see some magic happen!</h2>
-    </div>
-  );
+    <>
+      <p>Count: {state.count}</p>
+      <button onClick={() => dispatch(decrement())}>-</button>
+      <button onClick={() => dispatch(increment())}>+</button>
+    </>
+  )
 }
